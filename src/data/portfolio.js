@@ -119,10 +119,10 @@ export const projects = [
   {
     title: 'Website Portofolio',
     description: 'Website Portofolio.',
-    image: '/projects/project-1.svg',
+    image: '/portofolio.png',
     tech: ['React', 'Node JS', 'Vercel'],
-    demo: 'https://personal-trainer-eta-six.vercel.app/',
-    repo: 'https://github.com/AhmadFebriansyah/PersonalTrainer.git',
+    demo: 'https://potofolio-febri.vercel.app/',
+    repo: 'https://github.com/AhmadFebriansyah/Potofolio-Febri.git',
   },
   {
     title: 'Chatbot Personal Trainer',
