@@ -117,6 +117,14 @@ export const skills = [
 
 export const projects = [
   {
+    title: 'Ryze Sport',
+    description: 'Website e-commerce yang dikembangkan menggunakan pendekatan pengembangan berbantuan AI Vibe Coding dengan Claude AI. Website ini memiliki berbagai fitur, termasuk katalog produk, pencarian dan filter produk, detail produk, keranjang belanja, serta pengelolaan pesanan.',
+    image: '/projects/ryze.png',
+    tech: ['React', 'Node JS', 'Vercel', 'PostgreSQL', 'Neon', 'Claude', 'Express JS'],
+    demo: 'https://ryzesport.vercel.app',
+    repo: 'https://github.com/AhmadFebriansyah/ryzesport.git',
+  },
+  {
     title: 'Website Portofolio',
     description: 'Website Portofolio.',
     image: '/portofolio.png',
