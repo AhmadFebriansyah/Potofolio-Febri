@@ -10,7 +10,7 @@ export default function ChatWidget() {
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const [messages, setMessages] = useState([
-    { from: 'bot', text: `Halo! 👋 Saya asisten ${profile.nickname}. Ada yang ingin ditanyakan?` },
+    { from: 'bot', text: `Halo! Saya asisten ${profile.nickname}. Ada yang ingin ditanyakan?` },
   ])
   const bottomRef = useRef(null)
 
@@ -44,47 +44,40 @@ export default function ChatWidget() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="card absolute bottom-16 right-0 flex h-[28rem] w-[min(22rem,calc(100vw-2.5rem))] flex-col overflow-hidden bg-surface shadow-2xl"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.15 }}
+            className="absolute bottom-14 right-0 flex h-[28rem] max-h-[calc(100dvh-6rem)] w-[min(22rem,calc(100vw-2.5rem))] flex-col overflow-hidden border border-ink bg-surface"
           >
             <div className="flex items-center gap-3 border-b border-line px-4 py-3">
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-accent to-accent2 font-bold text-bg">
-                {profile.nickname[0]}
-              </span>
-              <div>
-                <p className="text-sm font-bold">{profile.nickname} Assistant</p>
-                <p className="flex items-center gap-1 text-xs text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Online
-                </p>
-              </div>
+              <p className="text-sm font-semibold">{profile.nickname} Assistant</p>
             </div>
 
             <div className="flex-1 space-y-3 overflow-y-auto p-4">
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <p
-                    className={`max-w-[85%] whitespace-pre-line rounded-2xl px-4 py-2 text-sm ${
+                    className={`max-w-[85%] whitespace-pre-line px-3 py-2 text-sm ${
                       m.from === 'user'
-                        ? 'rounded-br-sm bg-gradient-to-r from-accent to-accent2 text-bg'
-                        : 'rounded-bl-sm border border-line bg-bg'
+                        ? 'bg-ink text-bg'
+                        : 'border border-line bg-bg'
                     }`}
                   >
                     {m.text}
                   </p>
                 </div>
               ))}
-              {sending && <p className="text-xs text-muted">mengetik…</p>}
+              {sending && <p className="text-xs text-muted" role="status">mengetik…</p>}
               <div ref={bottomRef} />
             </div>
 
-            <div className="flex gap-2 overflow-x-auto px-4 pb-2">
+            <div className="flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none]">
               {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => send(s)}
-                  className="shrink-0 rounded-full border border-line px-3 py-1 text-xs text-muted hover:border-accent hover:text-accent"
+                  className="shrink-0 border border-line px-3 py-1.5 text-xs text-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   {s}
                 </button>
@@ -102,13 +95,14 @@ export default function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Tulis pesan…"
-                className="flex-1 rounded-full border border-line bg-bg px-4 py-2 text-sm outline-none focus:border-accent"
+                aria-label="Pesan"
+                className="min-w-0 flex-1 border border-line bg-bg px-3 py-2 text-base sm:text-sm"
               />
               <button
                 type="submit"
                 disabled={sending}
                 aria-label="Kirim"
-                className="grid h-9 w-9 place-items-center rounded-full bg-accent text-bg disabled:opacity-50"
+                className="grid h-11 w-11 shrink-0 place-items-center bg-ink text-bg transition-colors hover:bg-accent disabled:opacity-50"
               >
                 <HiPaperAirplane className="rotate-90" />
               </button>
@@ -119,10 +113,11 @@ export default function ChatWidget() {
 
       <button
         onClick={() => setOpen(!open)}
-        aria-label="Chat"
-        className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-accent to-accent2 text-2xl text-bg shadow-lg shadow-accent/30 transition hover:scale-110"
+        aria-expanded={open}
+        className="inline-flex h-11 items-center gap-2 bg-ink px-4 text-sm font-medium text-bg transition-colors hover:bg-accent"
       >
-        {open ? <HiX /> : <HiChatAlt2 />}
+        {open ? <HiX aria-hidden="true" /> : <HiChatAlt2 aria-hidden="true" />}
+        {open ? 'Tutup' : 'Tanya asisten'}
       </button>
     </div>
   )

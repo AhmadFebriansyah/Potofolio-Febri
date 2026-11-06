@@ -1,12 +1,11 @@
-import { motion } from 'framer-motion'
 import { HiArrowRight, HiLocationMarker } from 'react-icons/hi'
 import { profile, socials } from '../data/portfolio.js'
-import { fadeUp } from './SectionTitle.jsx'
+import Section from './Section.jsx'
 import { Icon } from './icons.jsx'
 
 export default function Contact() {
   const { map } = profile
-  const cards = [
+  const rows = [
     socials.find((s) => s.icon === 'github'),
     { icon: 'email', label: 'Email', handle: profile.email, url: `mailto:${profile.email}` },
     { icon: 'whatsapp', label: 'WhatsApp', handle: `+${profile.whatsapp}`, url: `https://wa.me/${profile.whatsapp}` },
@@ -14,65 +13,55 @@ export default function Contact() {
   ].filter(Boolean)
 
   return (
-    <section id="contact" className="mx-auto max-w-6xl px-5 py-24">
-      <motion.div {...fadeUp(0)} className="mb-12 text-center">
-        <span className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Get In Touch</span>
-        <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">Contact Me</h2>
-        <p className="mx-auto mt-4 max-w-xl text-muted">
-          Punya proyek atau ingin berkolaborasi? Hubungi saya di bawah ini.
-        </p>
-      </motion.div>
+    <Section
+      id="contact"
+      index="06"
+      title="Contact Me"
+      subtitle="Punya proyek atau ingin berkolaborasi? Hubungi saya di bawah ini."
+    >
+      <div className="grid gap-10 xl:grid-cols-2">
+        <ul className="border-t border-line">
+          {rows.map((r) => (
+            <li key={r.label} className="border-b border-line">
+              <a
+                href={r.url}
+                target={r.url.startsWith('http') ? '_blank' : undefined}
+                rel="noreferrer"
+                className="flex min-h-11 items-center gap-3 py-3 transition-colors hover:text-accent"
+              >
+                <Icon name={r.icon} className="shrink-0 text-xl" />
+                {/* Di HP nama dan handle bertumpuk supaya email tidak terpotong */}
+                <span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-3">
+                  <span className="shrink-0 font-medium sm:w-24">{r.label}</span>
+                  <span className="min-w-0 truncate font-mono text-sm text-muted">{r.handle}</span>
+                </span>
+                <HiArrowRight aria-hidden="true" className="shrink-0" />
+              </a>
+            </li>
+          ))}
+        </ul>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-        {/* Peta lokasi */}
-        <motion.div {...fadeUp(0.1)} className="card relative min-h-[22rem] overflow-hidden p-0">
-          <iframe
-            title="Lokasi"
-            src={`https://maps.google.com/maps?q=${encodeURIComponent(map.query)}&z=14&output=embed`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 h-full w-full border-0 [filter:grayscale(1)_invert(0.92)_contrast(0.9)]"
-          />
+        <div>
+          <div className="relative h-72 overflow-hidden border border-line">
+            <iframe
+              title="Lokasi"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(map.query)}&z=14&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 h-full w-full border-0 grayscale"
+            />
+          </div>
           <a
             href={map.url}
             target="_blank"
             rel="noreferrer"
-            className="absolute left-4 top-4 flex items-center gap-2 rounded-xl border border-line bg-bg/90 px-4 py-2 backdrop-blur transition hover:border-accent"
+            className="mt-2 inline-flex min-h-11 items-center gap-2 text-sm transition-colors hover:text-accent"
           >
-            <HiLocationMarker className="text-lg text-accent" />
-            <span>
-              <span className="block text-sm font-bold">{map.label}</span>
-              <span className="block text-xs text-muted">{profile.location}</span>
-            </span>
+            <HiLocationMarker aria-hidden="true" className="text-accent" />
+            {map.label}, {profile.location}
           </a>
-        </motion.div>
-
-        {/* Daftar kontak */}
-        <div className="flex flex-col gap-4">
-          {cards.map((c, i) => (
-            <motion.a
-              key={c.label}
-              href={c.url}
-              target="_blank"
-              rel="noreferrer"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.07 }}
-              className="card group flex items-center gap-4 px-5 py-4 transition hover:border-accent/50"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line bg-bg text-xl">
-                <Icon name={c.icon} colored />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-bold">{c.label}</span>
-                <span className="block truncate text-sm text-muted">{c.handle}</span>
-              </span>
-              <HiArrowRight className="shrink-0 text-muted transition group-hover:translate-x-1 group-hover:text-accent" />
-            </motion.a>
-          ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

@@ -41,7 +41,7 @@ export default function PdfViewer({ url, title, onClose }) {
           canvas.width = viewport.width
           canvas.height = viewport.height
           canvas.style.width = '100%'
-          canvas.className = 'mx-auto mb-4 max-w-[1000px] rounded-lg shadow-2xl'
+          canvas.className = 'mx-auto mb-4 max-w-[1000px] border border-line'
           container.appendChild(canvas)
 
           await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise
@@ -61,14 +61,14 @@ export default function PdfViewer({ url, title, onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onContextMenu={(e) => e.preventDefault()}
-      className="fixed inset-0 z-[90] flex flex-col bg-bg/95 backdrop-blur-md"
+      className="fixed inset-0 z-[90] flex flex-col bg-bg"
     >
       <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-4">
         <h3 className="truncate font-bold">{title}</h3>
         <button
           onClick={onClose}
           aria-label="Tutup"
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-xl text-bg transition hover:scale-110"
+          className="grid h-11 w-11 shrink-0 place-items-center bg-ink text-xl text-bg transition-colors hover:bg-accent"
         >
           <HiX />
         </button>
@@ -76,7 +76,7 @@ export default function PdfViewer({ url, title, onClose }) {
 
       <div className="flex-1 select-none overflow-y-auto px-4 py-6" onClick={(e) => e.target === e.currentTarget && onClose()}>
         {status === 'loading' && <p className="mt-20 text-center text-muted">Memuat dokumen…</p>}
-        {status === 'error' && <p className="mt-20 text-center text-red-400">Dokumen gagal dimuat.</p>}
+        {status === 'error' && <p className="mt-20 text-center text-red-700">Dokumen gagal dimuat.</p>}
         <div ref={pagesRef} className="mx-auto max-w-[1000px]" />
       </div>
     </motion.div>

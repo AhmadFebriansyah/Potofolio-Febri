@@ -55,5 +55,5 @@ export function Icon({ name, className = '', colored = false }) {
   const entry = icons[name]
   if (!entry) return null
   const [Cmp, color] = entry
-  return <Cmp className={className} style={colored ? { color } : undefined} />
+  return <Cmp aria-hidden="true" className={className} style={colored ? { color } : undefined} />
 }

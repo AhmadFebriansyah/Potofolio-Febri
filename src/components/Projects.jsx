@@ -1,12 +1,16 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { HiArrowRight, HiChevronLeft, HiChevronRight, HiDocumentText, HiExternalLink } from 'react-icons/hi'
+import { HiChevronLeft, HiChevronRight, HiDocumentText, HiExternalLink } from 'react-icons/hi'
 import { FaGithub } from 'react-icons/fa'
-import { projects, githubUrl } from '../data/portfolio.js'
-import SectionTitle from './SectionTitle.jsx'
+import { projects } from '../data/portfolio.js'
+import Section from './Section.jsx'
 
 // pdf.js cukup besar, jadi baru dimuat saat proyek diklik
 const PdfViewer = lazy(() => import('./PdfViewer.jsx'))
+
+const link = 'inline-flex min-h-11 items-center gap-1.5 font-medium text-accent underline underline-offset-4'
+const navBtn =
+  'grid h-11 w-11 place-items-center border border-ink text-xl transition-colors hover:bg-ink hover:text-bg disabled:pointer-events-none disabled:opacity-30'
 
 export default function Projects() {
   const trackRef = useRef(null)
@@ -32,96 +36,75 @@ export default function Projects() {
     const el = trackRef.current
     const card = el.firstElementChild
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0
-    el.scrollBy({ left: dir * (card.offsetWidth + gap), behavior: 'smooth' })
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollBy({ left: dir * (card.offsetWidth + gap), behavior: reduced ? 'auto' : 'smooth' })
   }
 
-  const navBtn =
-    'grid h-12 w-12 place-items-center rounded-full bg-white text-2xl text-bg shadow-lg shadow-white/10 transition hover:scale-110 hover:bg-gradient-to-br hover:from-accent hover:to-accent2 hover:shadow-accent/40 disabled:pointer-events-none disabled:opacity-25'
-
   return (
-    <section id="projects" className="mx-auto max-w-6xl px-5 py-24">
-      <SectionTitle eyebrow="Portfolio" title="Selected Works"/>
-
-      <div className="mb-6 flex justify-end gap-3">
-        <button onClick={() => slide(-1)} disabled={!canPrev} aria-label="Sebelumnya" className={navBtn}>
-          <HiChevronLeft />
-        </button>
-        <button onClick={() => slide(1)} disabled={!canNext} aria-label="Berikutnya" className={navBtn}>
-          <HiChevronRight />
-        </button>
+    <Section id="projects" index="04" title="Selected Works">
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <p className="font-mono text-sm text-muted">{projects.length} proyek</p>
+        <div className="flex gap-2">
+          <button type="button" onClick={() => slide(-1)} disabled={!canPrev} aria-label="Proyek sebelumnya" className={navBtn}>
+            <HiChevronLeft aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => slide(1)} disabled={!canNext} aria-label="Proyek berikutnya" className={navBtn}>
+            <HiChevronRight aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
+      {/* Kartu berikutnya sengaja mengintip di HP sebagai tanda bisa digeser */}
       <div
         ref={trackRef}
         onScroll={updateButtons}
-        className="-mx-2 flex snap-x snap-mandatory gap-6 overflow-x-auto px-2 pb-6 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {projects.map((p, i) => (
+        {projects.map((p) => (
           <article
             key={p.title}
             onClick={p.pdf ? () => setViewing(p) : undefined}
-            className={`card group flex shrink-0 basis-full snap-start flex-col overflow-hidden transition hover:-translate-y-2 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/10 sm:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)] ${
+            className={`group flex shrink-0 basis-[85%] snap-start flex-col sm:basis-[calc((100%-1.5rem)/2)] md:basis-[85%] lg:basis-[calc((100%-1.5rem)/2)] ${
               p.pdf ? 'cursor-pointer' : ''
             }`}
           >
-            <div className="relative overflow-hidden">
-              <img
-                src={p.image}
-                alt={p.title}
-                className="aspect-video w-full object-cover transition duration-500 group-hover:scale-110"
-              />
-              <span className="absolute left-4 top-4 rounded-full bg-bg/80 px-3 py-1 font-mono text-xs text-accent backdrop-blur">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-            </div>
-            <div className="flex flex-1 flex-col p-6">
-              <div className="flex flex-wrap gap-2">
-                {p.tech.map((t) => (
-                  <span key={t} className="rounded-full bg-accent/10 px-3 py-1 font-mono text-[11px] text-accent">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <h3 className="mt-4 text-xl font-bold">{p.title}</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
-              <div className="mt-5 flex gap-5 text-sm font-semibold">
-                {p.pdf && (
-                  <button className="inline-flex items-center gap-1 text-accent hover:underline">
-                    <HiDocumentText /> View Details
-                  </button>
-                )}
-                {p.demo && (
-                  <a href={p.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-accent hover:underline">
-                    Live Demo <HiExternalLink />
-                  </a>
-                )}
-                {p.repo && (
-                  <a href={p.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-muted hover:text-white">
-                    <FaGithub /> Source
-                  </a>
-                )}
-              </div>
+            <img
+              src={p.image}
+              alt={p.title}
+              loading="lazy"
+              className="aspect-video w-full border border-line bg-surface object-cover object-top"
+            />
+            <h3 className="mt-4 text-xl font-semibold tracking-tight transition-colors group-hover:text-accent">
+              {p.title}
+            </h3>
+            <p className="mt-2 flex-1 leading-relaxed text-muted">{p.description}</p>
+            <p className="mt-3 font-mono text-xs leading-relaxed text-muted">{p.tech.join(' · ')}</p>
+            <div className="mt-2 flex flex-wrap gap-x-5 text-sm">
+              {p.pdf && (
+                <button type="button" className={link}>
+                  <HiDocumentText aria-hidden="true" /> View Details
+                </button>
+              )}
+              {p.demo && (
+                <a href={p.demo} target="_blank" rel="noreferrer" className={link}>
+                  Live Demo <HiExternalLink aria-hidden="true" />
+                </a>
+              )}
+              {p.repo && (
+                <a href={p.repo} target="_blank" rel="noreferrer" className={link}>
+                  <FaGithub aria-hidden="true" /> Source
+                </a>
+              )}
             </div>
           </article>
         ))}
       </div>
-
-      {/* <div className="mt-8 text-center">
-        <a
-          href={githubUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 font-semibold transition hover:border-accent hover:text-accent"
-        >
-          View More Projects <HiArrowRight className="transition group-hover:translate-x-1" />
-        </a>
-      </div> */}
 
       <Suspense fallback={null}>
         <AnimatePresence>
           {viewing && <PdfViewer url={viewing.pdf} title={viewing.title} onClose={() => setViewing(null)} />}
         </AnimatePresence>
       </Suspense>
-    </section>
+    </Section>
   )
 }

@@ -3,19 +3,22 @@ import { Icon } from './icons.jsx'
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted md:flex-row">
+    <footer className="mx-auto mt-8 max-w-6xl px-5 pb-16 md:pb-0">
+      <div className="flex flex-col gap-3 border-t border-ink py-6 text-sm text-muted md:flex-row md:items-center md:justify-between md:pr-44">
         <p>
-          © {new Date().getFullYear()} {profile.name}. All rights reserved.
+          © {new Date().getFullYear()} {profile.name}
         </p>
         <p className="font-mono text-xs">Built with React, Node.js & Vercel</p>
-        <div className="flex gap-4 text-lg">
+        <ul className="flex flex-wrap gap-x-5">
           {socials.map((s) => (
-            <a key={s.label} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="hover:text-accent">
-              <Icon name={s.icon} />
-            </a>
+            <li key={s.label}>
+              <a href={s.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 py-2 hover:text-accent">
+                <Icon name={s.icon} />
+                {s.label}
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </footer>
   )
