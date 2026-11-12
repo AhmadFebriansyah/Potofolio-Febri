@@ -117,6 +117,14 @@ export const skills = [
 
 export const projects = [
   {
+    title: 'Ryze Coffee',
+    description: 'Contoh website company profile untuk brand kopi fiktif, terdiri dari halaman Beranda, Tentang, Menu, dan Toko. Halaman Menu menampilkan katalog minuman per kategori dengan navigasi yang mengikuti posisi scroll, sedangkan halaman Toko memuat alamat, jam buka, dan tautan Google Maps untuk cabang di Jakarta, Bekasi, Bogor, dan Sukabumi. Data menu dan toko disimpan dalam file JSON sehingga mudah diperbarui.',
+    image: '/projects/ryze-coffee.webp',
+    tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Motion', 'Vitest', 'Vercel'],
+    demo: 'https://ryze-coffee-beta.vercel.app/',
+    repo: 'https://github.com/AhmadFebriansyah/ryze-coffee.git',
+  },
+  {
     title: 'Ryze Sport',
     description: 'Website e-commerce yang dikembangkan menggunakan pendekatan pengembangan berbantuan AI Vibe Coding dengan Claude AI. Website ini memiliki berbagai fitur, termasuk katalog produk, pencarian dan filter produk, detail produk, keranjang belanja, serta pengelolaan pesanan.',
     image: '/projects/ryze.png',
